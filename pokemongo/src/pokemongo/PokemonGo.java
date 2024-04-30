@@ -3,6 +3,7 @@ package pokemongo;
 
 import Menu_utils.OptionDuplicateException;
 import Menu_utils.menudaw;
+import basedatos.dbconnect;
 import fitxers.Caratula;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,12 +25,13 @@ public class PokemonGo {
     }
 
     /* la ejecucion programa*/
-    private void run() throws SQLException {
+    private void run() throws SQLException, ClassNotFoundException {
         
         boolean exit = false;
         mostrarLogo();
-        menudaw menu = new menudaw("Manteniment Agenda ");
+        menudaw menu = new menudaw("Pokemon go ");
         addAllOptions(menu);
+   dbconnect.loadDriver();
         //introDadesProva(/* */);
         int opcio;
         entrenadores = new EntrenadorDAO();
@@ -50,13 +52,19 @@ public class PokemonGo {
                     consultaEntrenador();
                     break;
                 case 5:
-                    cazarPokemon();
+                    
+                    listarEntrenadores();
                     break;
                 case 6:
+                     cazarPokemon();
                     listarMochila();
                     break;
                 case 7:
+                      listarMochila();
                     listarTodosPokemons();
+                    break;
+                    case 8:
+                         listarTodosPokemons();
                     break;
                 case 1: //Sortir
                     salir();
@@ -96,6 +104,7 @@ public class PokemonGo {
             menu.AddOption("Dar de alta entrenador");
             menu.AddOption("Dar de baja entrenador");
             menu.AddOption("Consultar entrenador");
+             menu.AddOption("Listar entrenadores");
             menu.AddOption("Cazar Pokemon");
             menu.AddOption("Listar Pokemons Cazados");
             menu.AddOption("Listar tipos Pokemon existentes en juego");
@@ -166,6 +175,14 @@ public class PokemonGo {
         } catch (SQLException ex) {
             System.out.println("Error cerrar conexión " + ex.getMessage());
         }
+    }
+
+    private void listarEntrenadores() {
+        List<entrenador> todos = entrenadores.totsEntrenadors();
+        for (entrenador trainer : todos){
+            System.out.println(trainer);
+        }
+        System.out.println("Numero de entrenadores"+ todos.size());
     }
         
 }
