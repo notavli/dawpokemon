@@ -101,20 +101,27 @@ public class EntrenadorDAO {
      */
     public entrenador esborrarEntrenador(String name) throws SQLException 
     {
-        if (conn_principal!=null)
+       if (this.existeEntrenador(name))
         {
-           Statement stmt = conn_principal.createStatement();
-           String query ="DELETE FROM entrenadors WHERE NOMBRE="+name+"";
-            System.out.println(query);
-              int filasAfectadas = stmt.executeUpdate(query);
+            entrenador borrar = this.devolverEntrenador(name);
             
-            if (filasAfectadas == 0) {
-                    entrenador = null; // No se encontró el entrenador para borrar
-                }
+            Statement stmt = conn_principal.createStatement();
+            String query = "Delete "
+                    + " from entrenadors where upper(name) = '" + name.toUpperCase() + "'";
+            
+            int row = stmt.executeUpdate(query);
+            if (row>0)
+            {
+                return borrar;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
-       
-         return entrenador;
-       
+        else
+            return null;
     }
            
 
@@ -157,9 +164,6 @@ public class EntrenadorDAO {
      */
 
     public entrenador devolverEntrenador(String name) throws SQLException{
-    
-        
-    
  if(conn_principal!=null){
      Statement stmt= conn_principal.createStatement();
      
