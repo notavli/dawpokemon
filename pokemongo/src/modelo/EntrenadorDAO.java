@@ -8,6 +8,7 @@ import basedatos.dbconnect;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
+import modelo.entrenador;
 
 
 public class EntrenadorDAO {
@@ -100,9 +101,27 @@ public class EntrenadorDAO {
      */
     public entrenador esborrarEntrenador(String name) throws SQLException 
     {
-       
-         return null;
-       
+       if (this.existeEntrenador(name))
+        {
+            entrenador borrar = this.devolverEntrenador(name);
+            
+            Statement stmt = conn_principal.createStatement();
+            String query = "Delete "
+                    + " from entrenadors where upper(name) = '" + name.toUpperCase() + "'";
+            
+            int row = stmt.executeUpdate(query);
+            if (row>0)
+            {
+                return borrar;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
+        else
+            return null;
     }
            
 
@@ -145,9 +164,6 @@ public class EntrenadorDAO {
      */
 
     public entrenador devolverEntrenador(String name) throws SQLException{
-    
-        
-    
  if(conn_principal!=null){
      Statement stmt= conn_principal.createStatement();
      
